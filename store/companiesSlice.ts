@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Company {
   name: string;
@@ -17,8 +17,8 @@ const companies = createSlice({
   name: 'companies',
   initialState,
   reducers: {
-    addCompany(state) {
-      console.log(state);
+    addCompany(state, action: PayloadAction<Company>) {
+      state.push(action.payload);
     },
   },
 });

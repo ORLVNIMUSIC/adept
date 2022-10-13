@@ -1,5 +1,7 @@
 import type { NextPage } from 'next';
+import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { addCompany } from '../store/companiesSlice';
 import { RootState } from '../store/store';
 
 const Home: NextPage = () => {
@@ -7,6 +9,26 @@ const Home: NextPage = () => {
   const store = useSelector((state: RootState) => {
     return state;
   });
+
+  const companyName = useRef<HTMLInputElement>(null);
+  const companyEmpNum = useRef<HTMLInputElement>(null);
+  const companyAddress = useRef<HTMLInputElement>(null);
+
+  function addHandler() {
+    if (companyName.current && companyName.current.value) {
+      if (companyEmpNum.current && companyEmpNum.current.value) {
+        if (companyAddress.current && companyAddress.current.value) {
+          dispatch(
+            addCompany({
+              name: companyName.current.value,
+              employeeNumber: Number(companyEmpNum.current.value),
+              address: companyAddress.current.value,
+            })
+          );
+        }
+      }
+    }
+  }
 
   return (
     <>
@@ -41,6 +63,28 @@ const Home: NextPage = () => {
                   );
                 })
               : ''}
+            <tr className="create">
+              <td>
+                <input type="button" value="Добавить" onClick={addHandler} />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  ref={companyName}
+                  placeholder="Название компании"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  ref={companyEmpNum}
+                  placeholder="Количество сотрудников"
+                />
+              </td>
+              <td>
+                <input type="text" ref={companyAddress} placeholder="Адрес" />
+              </td>
+            </tr>
           </tbody>
         </table>
         <table className="employees">
