@@ -1,6 +1,13 @@
 import type { NextPage } from 'next';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  const store = useSelector((state: RootState) => {
+    return state;
+  });
+
   return (
     <>
       <div className="container">
@@ -19,7 +26,22 @@ const Home: NextPage = () => {
               <td>Адрес</td>
             </tr>
           </thead>
-          {/* data goes here */}
+          <tbody>
+            {store.companies
+              ? store.companies.map((company) => {
+                  return (
+                    <tr key={company.name}>
+                      <td>
+                        <input type="checkbox" />
+                      </td>
+                      <td>{company.name}</td>
+                      <td>{company.employeeNumber}</td>
+                      <td>{company.address}</td>
+                    </tr>
+                  );
+                })
+              : ''}
+          </tbody>
         </table>
         <table className="employees">
           <caption>Работники выбранной компании</caption>

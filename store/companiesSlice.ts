@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface Company {
+export interface Company {
   name: string;
   employeeNumber: number;
   address: string;
@@ -9,12 +8,12 @@ interface Company {
 
 const initialState: Company[] = [
   { name: 'dsad', employeeNumber: 10, address: 'dsad' },
-  { name: 'dsad', employeeNumber: 10, address: 'dsad' },
-  { name: 'dsad', employeeNumber: 10, address: 'dsad' },
-  { name: 'dsad', employeeNumber: 10, address: 'dsad' },
+  { name: 'dsasdd', employeeNumber: 10, address: 'dsad' },
+  { name: 'dshfdad', employeeNumber: 10, address: 'dsad' },
+  { name: 'dsgdsad', employeeNumber: 10, address: 'dsad' },
 ];
 
-const companiesSlice = createSlice({
+const companies = createSlice({
   name: 'companies',
   initialState,
   reducers: {
@@ -24,5 +23,5 @@ const companiesSlice = createSlice({
   },
 });
 
-export const { addCompany } = companiesSlice.actions;
-export default companiesSlice.reducer;
+export const { addCompany } = companies.actions;
+export default companies.reducer;
