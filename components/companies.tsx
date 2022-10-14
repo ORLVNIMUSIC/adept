@@ -112,8 +112,15 @@ const Companies: React.FC = () => {
         <tbody>
           {store.companies
             ? store.companies.value.map((company) => {
+                if (chosenCompanies.includes(company.id)) {
+                }
                 return (
-                  <tr key={company.id}>
+                  <tr
+                    key={company.id}
+                    className={
+                      chosenCompanies.includes(company.id) ? 'chosen' : ''
+                    }
+                  >
                     <td>
                       <input
                         type="checkbox"
