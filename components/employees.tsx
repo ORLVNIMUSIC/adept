@@ -8,7 +8,6 @@ import {
 } from '../store/employeesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
-import { SelectedCompany } from '../store/selectedCompanySlice';
 
 enum updateProperty {
   name = 'name',
@@ -112,7 +111,14 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
   return (
     <>
       <table className="employees">
-        <caption>Работники выбранной компании</caption>
+        <caption>
+          Работники компании{' '}
+          {
+            store.companies.value.find(
+              (company) => company.id === selectedCompanyId
+            )?.name
+          }
+        </caption>
         <thead>
           <tr>
             <td>
