@@ -1,6 +1,11 @@
 import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCompany, updateCompany, Company } from '../store/companiesSlice';
+import {
+  addCompany,
+  updateCompany,
+  Company,
+  removeCompanies,
+} from '../store/companiesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -67,12 +72,18 @@ const Companies: React.FC = () => {
 
   //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function allChosenHandler() {
+    if (!store.companies.value.length) return;
     setAllCompaniesChosen(!allCompaniesChosen);
-
     setChosenCompanies(store.companies.value.map((company) => company.id));
     if (allCompaniesChosen) {
       setChosenCompanies([]);
     }
+  }
+
+  function removeHandler() {
+    dispatch(removeCompanies(chosenCompanies));
+    setChosenCompanies([]);
+    setAllCompaniesChosen(false);
   }
 
   return (
@@ -88,7 +99,7 @@ const Companies: React.FC = () => {
                 onChange={allChosenHandler}
               />
               {chosenCompanies.length ? (
-                <input type="button" value="Удалить" />
+                <input type="button" onClick={removeHandler} value="Удалить" />
               ) : (
                 ''
               )}
