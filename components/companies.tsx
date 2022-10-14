@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCompany } from '../store/companiesSlice';
 import { RootState } from '../store/store';
+import { v4 as uuidv4 } from 'uuid';
 
 const Companies: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Companies: React.FC = () => {
       if (companyAddress.current && companyAddress.current.value) {
         dispatch(
           addCompany({
+            id: uuidv4(),
             name: companyName.current.value,
             employeeNumber: 0,
             address: companyAddress.current.value,
@@ -43,7 +45,7 @@ const Companies: React.FC = () => {
           {store.companies
             ? store.companies.map((company) => {
                 return (
-                  <tr key={company.name}>
+                  <tr key={company.id}>
                     <td>
                       <input type="checkbox" />
                     </td>

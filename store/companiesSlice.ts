@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Company {
+  id: string;
   name: string;
   employeeNumber: number;
   address: string;
 }
 
 const initialState: Company[] = [
-  { name: 'dsad', employeeNumber: 10, address: 'dsad' },
-  { name: 'dsasdd', employeeNumber: 10, address: 'dsad' },
-  { name: 'dshfdad', employeeNumber: 10, address: 'dsad' },
-  { name: 'dsgdsad', employeeNumber: 10, address: 'dsad' },
+  { id: uuidv4(), name: 'dsad', employeeNumber: 10, address: 'dsad' },
+  { id: uuidv4(), name: 'dsasdd', employeeNumber: 10, address: 'dsad' },
+  { id: uuidv4(), name: 'dshfdad', employeeNumber: 10, address: 'dsad' },
+  { id: uuidv4(), name: 'dsgdsad', employeeNumber: 10, address: 'dsad' },
 ];
 
 const companies = createSlice({
@@ -19,6 +21,19 @@ const companies = createSlice({
   reducers: {
     addCompany(state, action: PayloadAction<Company>) {
       state.push(action.payload);
+    },
+
+    removeCompanies(state, action: PayloadAction<string[]>) {
+      state = state.filter((company) => action.payload.includes(company.id));
+    },
+
+    updateCompany(state, action: PayloadAction<Company>) {
+      state = state.map((company) => {
+        if (company.id === action.payload.id) {
+          return action.payload;
+        }
+        return company;
+      });
     },
   },
 });
