@@ -1,8 +1,13 @@
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCompany } from '../store/companiesSlice';
+import { addCompany, updateCompany, Company } from '../store/companiesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
+
+enum updateProperty {
+  name = 'name',
+  address = 'address',
+}
 
 const Companies: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,6 +32,34 @@ const Companies: React.FC = () => {
       }
     }
   }
+
+  function updateHandler(company: Company, value: string, property: string) {
+    switch (property) {
+      case 'name': {
+        dispatch(
+          updateCompany({
+            id: company.id,
+            name: value,
+            employeeNumber: company.employeeNumber,
+            address: company.address,
+          })
+        );
+        break;
+      }
+      case 'address': {
+        dispatch(
+          updateCompany({
+            id: company.id,
+            name: company.name,
+            employeeNumber: company.employeeNumber,
+            address: value,
+          })
+        );
+        break;
+      }
+    }
+  }
+
   return (
     <>
       <table className="companies">
@@ -43,15 +76,45 @@ const Companies: React.FC = () => {
         </thead>
         <tbody>
           {store.companies
-            ? store.companies.map((company) => {
+            ? store.companies.value.map((company) => {
                 return (
                   <tr key={company.id}>
                     <td>
                       <input type="checkbox" />
                     </td>
-                    <td>{company.name}</td>
-                    <td>{company.employeeNumber}</td>
-                    <td>{company.address}</td>
+                    <td>
+                      <input
+                        type="text"
+                        value={company.name}
+                        onChange={(event) => {
+                          updateHandler(
+                            company,
+                            event.target.value,
+                            updateProperty.name
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={company.employeeNumber}
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={company.address}
+                        onChange={(event) => {
+                          updateHandler(
+                            company,
+                            event.target.value,
+                            updateProperty.address
+                          );
+                        }}
+                      />
+                    </td>
                   </tr>
                 );
               })
