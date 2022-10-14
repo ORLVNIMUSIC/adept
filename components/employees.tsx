@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addEmployee,
   Employee,
-  removeEmployee,
+  removeEmployees,
   updateEmployee,
 } from '../store/employeesSlice';
 import { RootState } from '../store/store';
@@ -29,8 +29,6 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
   const companyEmployees = store.employees.value.filter(
     (employee) => employee.companyId === selectedCompanyId
   );
-
-  console.log(companyEmployees);
 
   const [chosenEmployees, setChosenEmployees] = useState<string[]>([]);
   const [allEmployeesChosen, setAllEmployeesChosen] = useState<boolean>(false);
@@ -123,7 +121,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
         counter: companyEmployees.length - chosenEmployees.length,
       })
     );
-    dispatch(removeEmployee(chosenEmployees));
+    dispatch(removeEmployees(chosenEmployees));
     setChosenEmployees([]);
     setAllEmployeesChosen(false);
   }

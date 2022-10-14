@@ -178,7 +178,7 @@ const employees = createSlice({
       state.value.push(action.payload);
     },
 
-    removeEmployee(state, action: PayloadAction<string[]>) {
+    removeEmployees(state, action: PayloadAction<string[]>) {
       state.value = state.value.filter(
         (employee) => !action.payload.includes(employee.id)
       );
@@ -195,6 +195,6 @@ const employees = createSlice({
   },
 });
 
-export const { addEmployee, updateEmployee, removeEmployee } =
+export const { addEmployee, updateEmployee, removeEmployees } =
   employees.actions;
 export default employees.reducer;

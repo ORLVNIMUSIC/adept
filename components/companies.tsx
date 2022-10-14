@@ -9,6 +9,7 @@ import {
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
 import { updateSelectedCompany } from '../store/selectedCompanySlice';
+import { removeEmployees } from '../store/employeesSlice';
 
 enum updateProperty {
   name = 'name',
@@ -82,7 +83,11 @@ const Companies: React.FC = () => {
   }
 
   function removeHandler() {
+    const employeesToRemove = store.employees.value
+      .filter((employee) => chosenCompanies.includes(employee.companyId))
+      .map((employee) => employee.id);
     dispatch(removeCompanies(chosenCompanies));
+    dispatch(removeEmployees(employeesToRemove));
     setChosenCompanies([]);
     setAllCompaniesChosen(false);
   }
