@@ -26,6 +26,12 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     return state;
   });
 
+  const companyEmployees = store.employees.value.filter(
+    (employee) => employee.companyId === selectedCompanyId
+  );
+
+  console.log(companyEmployees);
+
   const [chosenEmployees, setChosenEmployees] = useState<string[]>([]);
   const [allEmployeesChosen, setAllEmployeesChosen] = useState<boolean>(false);
 
@@ -50,13 +56,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
           dispatch(
             countCompanyEmployee({
               id: selectedCompanyId,
-              counter:
-                store.employees.value.reduce((total, employee) => {
-                  if (employee.companyId === selectedCompanyId) {
-                    return ++total;
-                  }
-                  return total;
-                }, 0) + 1,
+              counter: companyEmployees.length + 1,
             })
           );
         }
@@ -108,9 +108,9 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
 
   //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function allChosenHandler() {
-    if (!store.employees.value.length) return;
+    if (!companyEmployees.length) return;
     setAllEmployeesChosen(!allEmployeesChosen);
-    setChosenEmployees(store.employees.value.map((employee) => employee.id));
+    setChosenEmployees(companyEmployees.map((employee) => employee.id));
     if (allEmployeesChosen) {
       setChosenEmployees([]);
     }
@@ -120,13 +120,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     dispatch(
       countCompanyEmployee({
         id: selectedCompanyId,
-        counter:
-          store.employees.value.reduce((total, employee) => {
-            if (employee.companyId === selectedCompanyId) {
-              return ++total;
-            }
-            return total;
-          }, 0) - chosenEmployees.length,
+        counter: companyEmployees.length - chosenEmployees.length,
       })
     );
     dispatch(removeEmployee(chosenEmployees));
@@ -164,8 +158,8 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
           </tr>
         </thead>
         <tbody>
-          {store.employees
-            ? store.employees.value.map((employee) => {
+          {companyEmployees
+            ? companyEmployees.map((employee) => {
                 if (selectedCompanyId === employee.companyId)
                   return (
                     <tr
