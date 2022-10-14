@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCompany, updateCompany, Company } from '../store/companiesSlice';
 import { RootState } from '../store/store';
@@ -10,6 +10,9 @@ enum updateProperty {
 }
 
 const Companies: React.FC = () => {
+  const [chosenCompanies, setChosenCompanies] = useState<string[]>([]);
+  const [allCompaniesChosen, setAllCompaniesChosen] = useState<boolean>(false);
+
   const dispatch = useDispatch();
   const store = useSelector((state: RootState) => {
     return state;
@@ -18,6 +21,7 @@ const Companies: React.FC = () => {
   const companyName = useRef<HTMLInputElement>(null);
   const companyAddress = useRef<HTMLInputElement>(null);
 
+  //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function addHandler() {
     if (companyName.current && companyName.current.value) {
       if (companyAddress.current && companyAddress.current.value) {
@@ -33,6 +37,7 @@ const Companies: React.FC = () => {
     }
   }
 
+  //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function updateHandler(company: Company, value: string, property: string) {
     switch (property) {
       case 'name': {
@@ -60,6 +65,16 @@ const Companies: React.FC = () => {
     }
   }
 
+  //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
+  function allChosenHandler() {
+    setAllCompaniesChosen(!allCompaniesChosen);
+
+    setChosenCompanies(store.companies.value.map((company) => company.id));
+    if (allCompaniesChosen) {
+      setChosenCompanies([]);
+    }
+  }
+
   return (
     <>
       <table className="companies">
@@ -67,7 +82,16 @@ const Companies: React.FC = () => {
         <thead>
           <tr>
             <td>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={allCompaniesChosen}
+                onChange={allChosenHandler}
+              />
+              {chosenCompanies.length ? (
+                <input type="button" value="Удалить" />
+              ) : (
+                ''
+              )}
             </td>
             <td>Название компании</td>
             <td>Кол-во сотрудников</td>
@@ -80,12 +104,32 @@ const Companies: React.FC = () => {
                 return (
                   <tr key={company.id}>
                     <td>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={chosenCompanies.includes(company.id)}
+                        //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setChosenCompanies([
+                              ...chosenCompanies,
+                              company.id,
+                            ]);
+                          } else {
+                            setChosenCompanies(
+                              chosenCompanies.filter((id) => id !== company.id)
+                            );
+                          }
+                          if (!!chosenCompanies.length) {
+                            setAllCompaniesChosen(false);
+                          }
+                        }}
+                      />
                     </td>
                     <td>
                       <input
                         type="text"
                         value={company.name}
+                        checked={chosenCompanies.includes(company.id)}
                         onChange={(event) => {
                           updateHandler(
                             company,

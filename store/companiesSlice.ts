@@ -28,8 +28,8 @@ const companies = createSlice({
     },
 
     removeCompanies(state, action: PayloadAction<string[]>) {
-      state.value = state.value.filter((company) =>
-        action.payload.includes(company.id)
+      state.value = state.value.filter(
+        (company) => !action.payload.includes(company.id)
       );
     },
 
