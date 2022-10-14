@@ -8,6 +8,7 @@ import {
 } from '../store/employeesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
+import { SelectedCompany } from '../store/selectedCompanySlice';
 
 enum updateProperty {
   name = 'name',
@@ -15,7 +16,11 @@ enum updateProperty {
   position = 'position',
 }
 
-const Employees: React.FC = () => {
+interface Prop {
+  selectedCompanyId: string;
+}
+
+const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
   const dispatch = useDispatch();
   const store = useSelector((state: RootState) => {
     return state;
@@ -25,26 +30,23 @@ const Employees: React.FC = () => {
   const [allEmployeesChosen, setAllEmployeesChosen] = useState<boolean>(false);
 
   const employeeName = useRef<HTMLInputElement>(null);
-  const employeeCompany = useRef<HTMLInputElement>(null);
   const employeeSurname = useRef<HTMLInputElement>(null);
   const employeePosition = useRef<HTMLInputElement>(null);
 
   //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function addHandler() {
     if (employeeName.current && employeeName.current.value) {
-      if (employeeCompany.current && employeeCompany.current.value) {
-        if (employeeSurname.current && employeeSurname.current.value) {
-          if (employeePosition.current && employeePosition.current.value) {
-            dispatch(
-              addEmployee({
-                id: uuidv4(),
-                companyId: employeeCompany.current.value,
-                name: employeeName.current.value,
-                surName: employeeSurname.current.value,
-                position: employeePosition.current.value,
-              })
-            );
-          }
+      if (employeeSurname.current && employeeSurname.current.value) {
+        if (employeePosition.current && employeePosition.current.value) {
+          dispatch(
+            addEmployee({
+              id: uuidv4(),
+              companyId: selectedCompanyId,
+              name: employeeName.current.value,
+              surName: employeeSurname.current.value,
+              position: employeePosition.current.value,
+            })
+          );
         }
       }
     }
@@ -114,7 +116,16 @@ const Employees: React.FC = () => {
         <thead>
           <tr>
             <td>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={allEmployeesChosen}
+                onChange={allChosenHandler}
+              />
+              {chosenEmployees.length ? (
+                <input type="button" onClick={removeHandler} value="Удалить" />
+              ) : (
+                ''
+              )}
             </td>
             <td>Фамилия</td>
             <td>Имя</td>
@@ -124,79 +135,80 @@ const Employees: React.FC = () => {
         <tbody>
           {store.employees
             ? store.employees.value.map((employee) => {
-                if (chosenEmployees.includes(employee.id)) {
-                }
-                return (
-                  <tr
-                    key={employee.id}
-                    className={
-                      chosenEmployees.includes(employee.id) ? 'chosen' : ''
-                    }
-                  >
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={chosenEmployees.includes(employee.id)}
-                        //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setChosenEmployees([
-                              ...chosenEmployees,
-                              employee.id,
-                            ]);
-                          } else {
-                            setChosenEmployees(
-                              chosenEmployees.filter((id) => id !== employee.id)
+                if (selectedCompanyId === employee.companyId)
+                  return (
+                    <tr
+                      key={employee.id}
+                      className={
+                        chosenEmployees.includes(employee.id) ? 'chosen' : ''
+                      }
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={chosenEmployees.includes(employee.id)}
+                          //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setChosenEmployees([
+                                ...chosenEmployees,
+                                employee.id,
+                              ]);
+                            } else {
+                              setChosenEmployees(
+                                chosenEmployees.filter(
+                                  (id) => id !== employee.id
+                                )
+                              );
+                            }
+                            if (!!chosenEmployees.length) {
+                              setAllEmployeesChosen(false);
+                            }
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={employee.surName}
+                          checked={chosenEmployees.includes(employee.id)}
+                          onChange={(event) => {
+                            updateHandler(
+                              employee,
+                              event.target.value,
+                              updateProperty.surName
                             );
-                          }
-                          if (!!chosenEmployees.length) {
-                            setAllEmployeesChosen(false);
-                          }
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={employee.surName}
-                        checked={chosenEmployees.includes(employee.id)}
-                        onChange={(event) => {
-                          updateHandler(
-                            employee,
-                            event.target.value,
-                            updateProperty.surName
-                          );
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={employee.name}
-                        onChange={(event) => {
-                          updateHandler(
-                            employee,
-                            event.target.value,
-                            updateProperty.name
-                          );
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={employee.position}
-                        onChange={(event) => {
-                          updateHandler(
-                            employee,
-                            event.target.value,
-                            updateProperty.position
-                          );
-                        }}
-                      />
-                    </td>
-                  </tr>
-                );
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={employee.name}
+                          onChange={(event) => {
+                            updateHandler(
+                              employee,
+                              event.target.value,
+                              updateProperty.name
+                            );
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={employee.position}
+                          onChange={(event) => {
+                            updateHandler(
+                              employee,
+                              event.target.value,
+                              updateProperty.position
+                            );
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
               })
             : ''}
           <tr className="create">

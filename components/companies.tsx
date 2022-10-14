@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addCompany,
@@ -8,6 +8,7 @@ import {
 } from '../store/companiesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
+import { updateSelectedCompany } from '../store/selectedCompanySlice';
 
 enum updateProperty {
   name = 'name',
@@ -86,6 +87,14 @@ const Companies: React.FC = () => {
     setAllCompaniesChosen(false);
   }
 
+  useEffect(() => {
+    if (chosenCompanies.length === 1) {
+      dispatch(updateSelectedCompany(chosenCompanies[0]));
+    } else {
+      dispatch(updateSelectedCompany(undefined));
+    }
+  }, [chosenCompanies]);
+
   return (
     <>
       <table className="companies">
@@ -112,8 +121,6 @@ const Companies: React.FC = () => {
         <tbody>
           {store.companies
             ? store.companies.value.map((company) => {
-                if (chosenCompanies.includes(company.id)) {
-                }
                 return (
                   <tr
                     key={company.id}
@@ -137,6 +144,7 @@ const Companies: React.FC = () => {
                               chosenCompanies.filter((id) => id !== company.id)
                             );
                           }
+
                           if (!!chosenCompanies.length) {
                             setAllCompaniesChosen(false);
                           }

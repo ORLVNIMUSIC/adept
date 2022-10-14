@@ -1,12 +1,14 @@
 import type { NextPage } from 'next';
-import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Companies from '../components/companies';
 import Employees from '../components/employees';
-import { addCompany } from '../store/companiesSlice';
 import { RootState } from '../store/store';
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  const store = useSelector((state: RootState) => {
+    return state;
+  });
   return (
     <>
       <div className="container">
@@ -14,7 +16,11 @@ const Home: NextPage = () => {
       </div>
       <div className="container">
         <Companies />
-        <Employees />
+        {!!store.selectedCompany.value.id ? (
+          <Employees selectedCompanyId={store.selectedCompany.value.id} />
+        ) : (
+          ''
+        )}
       </div>
     </>
   );
