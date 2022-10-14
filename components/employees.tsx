@@ -8,6 +8,7 @@ import {
 } from '../store/employeesSlice';
 import { RootState } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
+import { countCompanyEmployee } from '../store/companiesSlice';
 
 enum updateProperty {
   name = 'name',
@@ -44,6 +45,18 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
               name: employeeName.current.value,
               surName: employeeSurname.current.value,
               position: employeePosition.current.value,
+            })
+          );
+          dispatch(
+            countCompanyEmployee({
+              id: selectedCompanyId,
+              counter:
+                store.employees.value.reduce((total, employee) => {
+                  if (employee.companyId === selectedCompanyId) {
+                    return ++total;
+                  }
+                  return total;
+                }, 0) + 1,
             })
           );
         }
@@ -104,6 +117,18 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
   }
 
   function removeHandler() {
+    dispatch(
+      countCompanyEmployee({
+        id: selectedCompanyId,
+        counter:
+          store.employees.value.reduce((total, employee) => {
+            if (employee.companyId === selectedCompanyId) {
+              return ++total;
+            }
+            return total;
+          }, 0) - chosenEmployees.length,
+      })
+    );
     dispatch(removeEmployee(chosenEmployees));
     setChosenEmployees([]);
     setAllEmployeesChosen(false);

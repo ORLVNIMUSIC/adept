@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
 import { Employee, employeesData } from './employeesSlice';
 
 export interface Company {
@@ -75,8 +74,29 @@ const companies = createSlice({
         return company;
       });
     },
+
+    countCompanyEmployee(
+      state,
+      action: PayloadAction<{ id: string; counter: number }>
+    ) {
+      state.value = state.value.map((company) => {
+        if (company.id === action.payload.id) {
+          const updatedCompany = {
+            ...company,
+            employeeNumber: action.payload.counter,
+          };
+          return updatedCompany;
+        }
+        return company;
+      });
+    },
   },
 });
 
-export const { addCompany, updateCompany, removeCompanies } = companies.actions;
+export const {
+  addCompany,
+  updateCompany,
+  removeCompanies,
+  countCompanyEmployee,
+} = companies.actions;
 export default companies.reducer;
