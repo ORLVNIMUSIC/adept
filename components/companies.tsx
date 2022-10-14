@@ -115,7 +115,7 @@ const Companies: React.FC = () => {
               {chosenCompanies.length ? (
                 <input type="button" onClick={removeHandler} value="Удалить" />
               ) : (
-                ''
+                <></>
               )}
             </td>
             <td>Название компании</td>
@@ -124,76 +124,77 @@ const Companies: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {store.companies
-            ? store.companies.value.map((company) => {
-                return (
-                  <tr
-                    key={company.id}
-                    className={
-                      chosenCompanies.includes(company.id) ? 'chosen' : ''
-                    }
-                  >
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={chosenCompanies.includes(company.id)}
-                        //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setChosenCompanies([
-                              ...chosenCompanies,
-                              company.id,
-                            ]);
-                          } else {
-                            setChosenCompanies(
-                              chosenCompanies.filter((id) => id !== company.id)
-                            );
-                          }
+          {store.companies ? (
+            store.companies.value.map((company) => {
+              return (
+                <tr
+                  key={company.id}
+                  className={
+                    chosenCompanies.includes(company.id) ? 'chosen' : ''
+                  }
+                >
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={chosenCompanies.includes(company.id)}
+                      //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setChosenCompanies([...chosenCompanies, company.id]);
+                        } else {
+                          setChosenCompanies(
+                            chosenCompanies.filter((id) => id !== company.id)
+                          );
+                        }
 
-                          if (!!chosenCompanies.length) {
-                            setAllCompaniesChosen(false);
-                          }
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={company.name}
-                        checked={chosenCompanies.includes(company.id)}
-                        onChange={(event) => {
-                          updateHandler(
-                            company,
-                            event.target.value,
-                            updateProperty.name
-                          );
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={company.employeeNumber}
-                        disabled={true}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={company.address}
-                        onChange={(event) => {
-                          updateHandler(
-                            company,
-                            event.target.value,
-                            updateProperty.address
-                          );
-                        }}
-                      />
-                    </td>
-                  </tr>
-                );
-              })
-            : ''}
+                        if (!!chosenCompanies.length) {
+                          setAllCompaniesChosen(false);
+                        }
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={company.name}
+                      checked={chosenCompanies.includes(company.id)}
+                      onChange={(event) => {
+                        updateHandler(
+                          company,
+                          event.target.value,
+                          updateProperty.name
+                        );
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={company.employeeNumber}
+                      disabled={true}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={company.address}
+                      onChange={(event) => {
+                        updateHandler(
+                          company,
+                          event.target.value,
+                          updateProperty.address
+                        );
+                      }}
+                    />
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </tbody>
+        <tfoot>
           <tr className="create">
             <td>
               <input type="button" value="Добавить" onClick={addHandler} />
@@ -216,7 +217,7 @@ const Companies: React.FC = () => {
               <input type="text" ref={companyAddress} placeholder="Адрес" />
             </td>
           </tr>
-        </tbody>
+        </tfoot>
       </table>
     </>
   );

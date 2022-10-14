@@ -147,7 +147,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
               {chosenEmployees.length ? (
                 <input type="button" onClick={removeHandler} value="Удалить" />
               ) : (
-                ''
+                <></>
               )}
             </td>
             <td>Фамилия</td>
@@ -156,84 +156,86 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
           </tr>
         </thead>
         <tbody>
-          {companyEmployees
-            ? companyEmployees.map((employee) => {
-                if (selectedCompanyId === employee.companyId)
-                  return (
-                    <tr
-                      key={employee.id}
-                      className={
-                        chosenEmployees.includes(employee.id) ? 'chosen' : ''
-                      }
-                    >
-                      <td>
-                        <input
-                          type="checkbox"
-                          checked={chosenEmployees.includes(employee.id)}
-                          //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChosenEmployees([
-                                ...chosenEmployees,
-                                employee.id,
-                              ]);
-                            } else {
-                              setChosenEmployees(
-                                chosenEmployees.filter(
-                                  (id) => id !== employee.id
-                                )
-                              );
-                            }
-                            if (!!chosenEmployees.length) {
-                              setAllEmployeesChosen(false);
-                            }
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={employee.surName}
-                          checked={chosenEmployees.includes(employee.id)}
-                          onChange={(event) => {
-                            updateHandler(
-                              employee,
-                              event.target.value,
-                              updateProperty.surName
+          {companyEmployees ? (
+            companyEmployees.map((employee) => {
+              if (selectedCompanyId === employee.companyId)
+                return (
+                  <tr
+                    key={employee.id}
+                    className={
+                      chosenEmployees.includes(employee.id) ? 'chosen' : ''
+                    }
+                  >
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={chosenEmployees.includes(employee.id)}
+                        //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setChosenEmployees([
+                              ...chosenEmployees,
+                              employee.id,
+                            ]);
+                          } else {
+                            setChosenEmployees(
+                              chosenEmployees.filter((id) => id !== employee.id)
                             );
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={employee.name}
-                          onChange={(event) => {
-                            updateHandler(
-                              employee,
-                              event.target.value,
-                              updateProperty.name
-                            );
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={employee.position}
-                          onChange={(event) => {
-                            updateHandler(
-                              employee,
-                              event.target.value,
-                              updateProperty.position
-                            );
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
-              })
-            : ''}
+                          }
+                          if (!!chosenEmployees.length) {
+                            setAllEmployeesChosen(false);
+                          }
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={employee.surName}
+                        checked={chosenEmployees.includes(employee.id)}
+                        onChange={(event) => {
+                          updateHandler(
+                            employee,
+                            event.target.value,
+                            updateProperty.surName
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={employee.name}
+                        onChange={(event) => {
+                          updateHandler(
+                            employee,
+                            event.target.value,
+                            updateProperty.name
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={employee.position}
+                        onChange={(event) => {
+                          updateHandler(
+                            employee,
+                            event.target.value,
+                            updateProperty.position
+                          );
+                        }}
+                      />
+                    </td>
+                  </tr>
+                );
+            })
+          ) : (
+            <></>
+          )}
+        </tbody>
+        <tfoot>
           <tr className="create">
             <td>
               <input type="button" value="Добавить" onClick={addHandler} />
@@ -252,7 +254,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
               />
             </td>
           </tr>
-        </tbody>
+        </tfoot>
       </table>
     </>
   );

@@ -14,13 +14,17 @@ const Home: NextPage = () => {
       <div className="container">
         <h1>Список компаний</h1>
       </div>
-      <div className="container">
-        <Companies />
-        {!!store.selectedCompany.value.id ? (
-          <Employees selectedCompanyId={store.selectedCompany.value.id} />
-        ) : (
-          ''
-        )}
+      <div className="container data">
+        <div className="leftTable">
+          <Companies />
+        </div>
+        <div className="rightTable">
+          {!!store.selectedCompany.value.id ? (
+            <Employees selectedCompanyId={store.selectedCompany.value.id} />
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </>
   );

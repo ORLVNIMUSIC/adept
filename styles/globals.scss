@@ -13,20 +13,47 @@ body {
 .container {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   justify-content: space-around;
   width: 90vw;
-  table {
-    width: 40%;
-    border: 2px solid black;
-    border-radius: 5px;
-    td {
-      border: 1px solid black;
+}
+
+.data {
+  justify-content: space-between;
+  height: 500px;
+  .leftTable,
+  .rightTable {
+    height: 100%;
+    overflow: auto;
+    .employees,
+    .companies {
+      border: 2px solid black;
+      caption {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+      }
+      thead {
+        input {
+          font-size: 0.8em;
+          padding: 0;
+        }
+        td {
+          border: 1px solid black;
+        }
+        position: sticky;
+        top: 25px;
+        background-color: #fff;
+      }
+      tfoot {
+        position: sticky;
+        bottom: 4px;
+        background-color: rgb(163, 163, 163);
+      }
     }
   }
-  h1 {
-    align-self: center;
-  }
-  .chosen {
-    background-color: aqua;
-  }
+}
+
+.chosen {
+  background-color: rgb(166, 247, 200);
 }
