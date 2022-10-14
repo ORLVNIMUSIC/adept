@@ -8,7 +8,7 @@ export interface Company {
   address: string;
 }
 
-const companiesData: Company[] = [
+export const companiesData: Company[] = [
   { id: uuidv4(), name: 'dsad', employeeNumber: 10, address: 'dsad' },
   { id: uuidv4(), name: 'dsasdd', employeeNumber: 10, address: 'dsad' },
   { id: uuidv4(), name: 'dshfdad', employeeNumber: 10, address: 'dsad' },

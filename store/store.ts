@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import companies from './companiesSlice';
+import employees from './employeesSlice';
 
 const combinedReducer = combineReducers({
   companies,
+  employees,
 });
 
 export default configureStore({
