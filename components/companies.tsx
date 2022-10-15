@@ -101,7 +101,7 @@ const Companies: React.FC = () => {
   }, [chosenCompanies]);
 
   return (
-    <>
+    <div className="leftTable">
       <table className="companies">
         <caption>Список компаний</caption>
         <thead>
@@ -219,7 +219,7 @@ const Companies: React.FC = () => {
           </tr>
         </tfoot>
       </table>
-    </>
+    </div>
   );
 };
 

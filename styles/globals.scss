@@ -21,34 +21,37 @@ body {
 .data {
   justify-content: space-between;
   height: 500px;
-  .leftTable,
-  .rightTable {
+  .wrapper {
     height: 100%;
-    overflow: auto;
-    .employees,
-    .companies {
-      border: 2px solid black;
-      caption {
-        position: sticky;
-        top: 0;
-        background-color: #fff;
-      }
-      thead {
-        input {
-          font-size: 0.8em;
-          padding: 0;
+    .leftTable,
+    .rightTable {
+      height: 100%;
+      overflow: auto;
+      .employees,
+      .companies {
+        border: 2px solid black;
+        caption {
+          position: sticky;
+          top: 0;
+          background-color: #fff;
         }
-        td {
-          border: 1px solid black;
+        thead {
+          input {
+            font-size: 0.8em;
+            padding: 0;
+          }
+          td {
+            border: 1px solid black;
+          }
+          position: sticky;
+          top: 25px;
+          background-color: #fff;
         }
-        position: sticky;
-        top: 25px;
-        background-color: #fff;
-      }
-      tfoot {
-        position: sticky;
-        bottom: 4px;
-        background-color: rgb(163, 163, 163);
+        tfoot {
+          position: sticky;
+          bottom: 4px;
+          background-color: rgb(163, 163, 163);
+        }
       }
     }
   }

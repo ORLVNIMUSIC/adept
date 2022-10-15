@@ -15,10 +15,10 @@ const Home: NextPage = () => {
         <h1>Список компаний</h1>
       </div>
       <div className="container data">
-        <div className="leftTable">
+        <div className="wrapper">
           <Companies />
         </div>
-        <div className="rightTable">
+        <div className="wrapper">
           {!!store.selectedCompany.value.id ? (
             <Employees selectedCompanyId={store.selectedCompany.value.id} />
           ) : (

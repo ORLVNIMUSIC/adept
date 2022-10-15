@@ -26,16 +26,37 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     return state;
   });
 
-  const companyEmployees = store.employees.value.filter(
-    (employee) => employee.companyId === selectedCompanyId
-  );
-
   const [chosenEmployees, setChosenEmployees] = useState<string[]>([]);
   const [allEmployeesChosen, setAllEmployeesChosen] = useState<boolean>(false);
+  const [employeesPage, setEmployeesPage] = useState<number>(0);
+
+  function getPagedArray<T>(array: T[], pageVolume: number = 20): T[] {
+    return array.filter((value, idx) => idx < (employeesPage + 1) * pageVolume);
+  }
+
+  const companyEmployees: Employee[] = [];
+  companyEmployees.push(
+    ...getPagedArray(
+      store.employees.value.filter(
+        (employee) => employee.companyId === selectedCompanyId
+      )
+    )
+  );
 
   const employeeName = useRef<HTMLInputElement>(null);
   const employeeSurname = useRef<HTMLInputElement>(null);
   const employeePosition = useRef<HTMLInputElement>(null);
+  const scrollableObject = useRef<HTMLDivElement>(null);
+
+  function scrollPageHandler(event: React.UIEvent<HTMLDivElement>) {
+    if (
+      event.currentTarget.scrollHeight -
+        (event.currentTarget.scrollTop + event.currentTarget.clientHeight) <
+      100
+    ) {
+      setEmployeesPage((prev) => prev + 1);
+    }
+  }
 
   //Специально сделал несколько вариантов работы с хендлерами событий для наглядности моей компетенции
   function addHandler() {
@@ -118,7 +139,10 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     dispatch(
       countCompanyEmployee({
         id: selectedCompanyId,
-        counter: companyEmployees.length - chosenEmployees.length,
+        counter:
+          store.companies.value.find(
+            (company) => company.id === selectedCompanyId
+          )!.employeeNumber - chosenEmployees.length,
       })
     );
     dispatch(removeEmployees(chosenEmployees));
@@ -126,7 +150,11 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     setAllEmployeesChosen(false);
   }
   return (
-    <>
+    <div
+      className="rightTable"
+      ref={scrollableObject}
+      onScroll={scrollPageHandler}
+    >
       <table className="employees">
         <caption>
           Работники компании{' '}
@@ -256,7 +284,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
           </tr>
         </tfoot>
       </table>
-    </>
+    </div>
   );
 };
 
