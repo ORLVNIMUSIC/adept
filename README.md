@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Список компаний
 
-## Getting Started
+Приложение спроектированно с помощью фреймворка [Nextjs](https://nextjs.org/) из соображений бóльшей эффективности процесса разработки. В целом проект может быть перенесен на нативный [Reactjs](https://reactjs.org/) без каких-либо проблем.
 
-First, run the development server:
+## Запуск проекта
+
+Клонируйте репозиторий на свое устройство и установите все необходимые пакеты с помощью вашего пакетного менеджера (npm используется в качестве примера):
+
+```bash
+npm i
+```
+
+После установки зависимостей можно запустить приложение в dev моде с помощью команды:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Или** соберите проект с помощью:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+и запустите в prod моде с помощью:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+npm run start
+```
 
-## Learn More
+## О проекте
 
-To learn more about Next.js, take a look at the following resources:
+### Таблицы
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Таблица `Список компаний` слева содержит данные о компаниях. У каждой компании можно менять значения `Название компании` и `Адрес` (`Количество сотрудников` высчитывается автоматически) - данные в сторе обновляются автоматически с каждым изменением строк.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+При выборе чекбокса напротив желаемой компании **_(ОДНОЙ)_** вся строка подствечивается цветом и формируется вторая таблица `Сотрудники компании [Название компании]`.
 
-## Deploy on Vercel
+При выборе более чем одной компании таблица `Сотрудники компании` расформировывается. Также есть возможность выбрать все видимые в данный момент компании (подробнее о выборе всех элементов в сторе позднее).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+После выбора желаемых компаний можно удалить выбранные компании из стора **(сотрудники соответствующих компаний так же удалаются из стора)**. Также имеется возможность создать новую компанию, указав поля `Название компании` и `Адрес` (`Количество сотрудников` по умолчанию у новой компании равно 0 и не редактируемо).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
+
+Таблица `Сотрудники компании [Название компании]` справа содержит данные о сотрудниках выбранной компании (`Фамилия`, `Имя`, `Должность`). Функционал данной таблицы идентичен функционалу таблиы `Список компаний`, за исключением того, что **все** поля в данной таблице редактируемы.
+
+### Динамическая пагинация (подгрузка данных)
+
+Для таблицы `Сотрудники компании [Название компании]` реализован механизм динамической подгрузки данных при скроллинге. По умолчанию при инициализации таблицы видны только первые 20 элеметов в списке.
+
+При скроллинге вниз по списку при определенной позиции скроллбара происходит подгрузка следующих 20 элементов списка и даннный алгоритм может продолжаться до тех пор, пока не будет виден весь список.
+
+**_ВАЖНО:_**
+При нажатии на чекбок для выбора всех элементов таблицы, выбираются только те из них, которые загруженны в элемент в данный момент.
+
+> Следовательно, если при начальной загрузке таблицы выбрать все элементы и удалить их, то удалятся только первые 20 элементов.
+
+Данный механизм так же может быть перенесен на таблицу `Список компаний`.

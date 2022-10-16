@@ -157,7 +157,7 @@ const Employees: React.FC<Prop> = ({ selectedCompanyId }) => {
     >
       <table className="employees">
         <caption>
-          Работники компании{' '}
+          Сотрудники компании{' '}
           {
             store.companies.value.find(
               (company) => company.id === selectedCompanyId
